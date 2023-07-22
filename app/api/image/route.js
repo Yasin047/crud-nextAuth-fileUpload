@@ -10,11 +10,13 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   const formData = await req.formData();
 
-  var imageUrlList = [];
-  var imagePublickId = [];
-  var imagePathList = [];
+  const imageUrlList = [];
+  const imagePublickId = [];
+  const imagePathList = [];
 
-  for (const formDataEntryValue of formDataEntryValues) {
+  const formDataEntryValues = Array.from(formData.values());
+
+  for (let formDataEntryValue of formDataEntryValues) {
     const arrayBuffer = await formDataEntryValue.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const tempdir = os.tmpdir();
@@ -23,7 +25,7 @@ export async function POST(req) {
     imagePathList.push(filePath);
   }
 
-  for (var i = 0; i < imagePathList.length; i++) {
+  for (let i = 0; i < imagePathList.length; i++) {
     var productFile = imagePathList[i];
     const uploadRes = await cloudinary.uploader.upload(productFile, {
       folder: "products",
